@@ -170,7 +170,9 @@ pipeline {
     stage ("Helm Uninstall") {
       steps {
         script {
-          sh("microk8s helm3 -n ${K8S_NAMESPACE} uninstall ${PROJECT_ARTIFACT_ID}")
+          catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
+            sh("microk8s helm3 -n ${K8S_NAMESPACE} uninstall ${PROJECT_ARTIFACT_ID}")
+          }
         }
       }
     }
